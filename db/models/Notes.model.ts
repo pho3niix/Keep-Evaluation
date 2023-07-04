@@ -10,6 +10,7 @@ export interface INotes {
     Title: string;
     Description: string;
     // IsActive?: string;
+    IsDone: boolean;
     CreatedAt?: Date;
     UpdatedAt?: Date;
 }
@@ -22,6 +23,7 @@ class Notes extends Model<InferAttributes<Notes>, InferCreationAttributes<Notes>
     // declare IsActive: string;
     declare CreatedAt: Date;
     declare UpdatedAt: Date;
+    declare IsDone: boolean;
 }
 
 Notes.init(
@@ -85,6 +87,10 @@ Notes.init(
             type: DataTypes.DATE,
             defaultValue: Database.literal('CURRENT_TIMESTAMP')
 
+        },
+        IsDone: {
+            type:DataTypes.BOOLEAN,
+            defaultValue: false
         }
     },
     {

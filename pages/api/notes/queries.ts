@@ -16,7 +16,8 @@ export interface IList {
     NoteId: INotes['NoteId']
     Title: INotes['Title']
     Description: INotes['Description']
-    CreatedAt: string
+    CreatedAt: string;
+    IsDone: INotes['IsDone']
 }
 
 export interface INoteId { NoteId?: INotes['NoteId'] }
@@ -32,7 +33,8 @@ class Structures {
                 NoteId: i.NoteId,
                 Title: i.Title,
                 Description: i.Description,
-                CreatedAt: FormatDate(i.CreatedAt)
+                CreatedAt: FormatDate(i.CreatedAt),
+                IsDone: i.IsDone
             })
         }
 
@@ -126,7 +128,8 @@ class Queries extends Structures {
                 "n"."NoteId",
                 "n"."Title",
                 "n"."Description",
-                "n"."CreatedAt"
+                "n"."CreatedAt",
+                "n"."IsDone"
             from "Notes" "n"
             where "n"."NoteId" = '${NoteId}'
         `)
@@ -134,12 +137,20 @@ class Queries extends Structures {
         return this._List(Response)[0]
     }
 
-    public async DeleteNoteById({ NoteId }: INoteId): Promise<number> {
-        return await Notes.destroy({
-            where: {
-                NoteId
-            }
-        })
+    public async DeleteNoteById({ NoteId }: INoteId): Promise<any> {
+        return await db.query(`
+            delete from "Notes" where "NoteId" = '${NoteId}'
+        `)
+    }
+
+    public async MarkAsDone({ NoteId }: INoteId): Promise<IList> {
+        await db.query(`
+            update "Notes"
+            set "IsDone" = true
+            where "NoteId" = '${NoteId}'
+        `)
+
+        return this.GetNoteById({ NoteId })
     }
 }
 

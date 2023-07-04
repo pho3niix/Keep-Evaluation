@@ -127,6 +127,32 @@ async function UpdateNoteById(req: NextApiRequest, res: NextApiResponse): Promis
     }
 };
 
+async function MarkAsDone(req: NextApiRequest, res: NextApiResponse): Promise<any> {
+    const {
+        NoteId
+    }: INoteId = req.query;
+
+    try {
+        if (!NoteId) return res.status(409).json(new CustomError(409, 'Please, input an UUID value for Note Id.'));
+
+        const Note = await Notes.GetNoteById({ NoteId });
+
+        if (!Note) return res.status(404).json(new CustomError(404, 'The specific note does not exists.'));
+
+        const NewNote = await Notes.MarkAsDone({
+            NoteId
+        });
+
+        return res.status(200).json({
+            message: 'Specific note successfully marked as done.',
+            results: NewNote
+        })
+
+    } catch (error) {
+        return res.status(409).json(new CustomError(409, error.message))
+    }
+};
+
 export default async function Index(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     const { method, query } = req;
 
@@ -145,6 +171,9 @@ export default async function Index(req: NextApiRequest, res: NextApiResponse): 
             break;
         case method == 'PUT':
             await UpdateNoteById(req, res);
+            break;
+        case method == 'PATCH':
+            await MarkAsDone(req, res);
             break;
 
         default:

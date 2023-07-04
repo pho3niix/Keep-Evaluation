@@ -19,7 +19,7 @@ services:
 
   app:
     image: node:16.17.0-alpine
-    command: sh -c "yarn install && PORT=5003 yarn dev"
+    command: sh -c "yarn install && yarn migrations && PORT=5003 yarn dev"
     volumes:
       - ./components:/app/components
       - ./db:/app/db

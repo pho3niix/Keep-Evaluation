@@ -9,6 +9,11 @@
     "migrations": "ts-node db/migrations.ts"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.13.7",
+    "@mui/material": "^5.13.7",
+    "@mui/styled-engine-sc": "^5.12.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "jsonwebtoken": "^9.0.0",
@@ -19,6 +24,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sequelize": "^6.32.1",
+    "styled-components": "^6.0.2",
     "ts-node": "^10.9.1"
   },
   "license": "MIT",

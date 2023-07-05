@@ -27,7 +27,7 @@ export default function Note({ children }) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button variant='contained' style={{ backgroundColor: 'white' }} id="check" size="small">Hola mundo</Button>
+        <Button variant='contained' style={{ backgroundColor: 'white' }} id="check" size="small">Detalle</Button>
       </CardActions>
     </Card>
   );

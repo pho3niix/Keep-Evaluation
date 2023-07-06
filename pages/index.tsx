@@ -19,7 +19,7 @@ export default function Index(props: Props) {
             .then((res) => res.json())
             .then(data => setNotes(data.results))
             .catch((error) => setError(error));
-    });
+    }, [Search]);
 
     function List() {
         if (Notes.length > 0) {

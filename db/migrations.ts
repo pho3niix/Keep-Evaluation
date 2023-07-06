@@ -1,4 +1,4 @@
-import { Database } from './db';
+import Db, { Database } from './db';
 
 import Users from './models/Users.model';
 import Notes from './models/Notes.model';
@@ -7,6 +7,8 @@ import Sessions from './models/Sessions.model';
 function Migrations() {
     return (async () => {
         await Database.sync({ alter: true });
+
+        await Db.query(`CREATE EXTENSION IF NOT EXISTS unaccent`);
 
         console.log('Users', Users == Database.models.Users);
         console.log('Notes', Notes == Database.models.Notes);

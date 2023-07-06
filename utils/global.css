@@ -38,6 +38,10 @@ footer {
 
 #dashboard {
     padding: 2%;
+}
+
+#card-list {
+    padding-top: 2%;
     display: flex;
     flex-wrap: wrap;
 }
@@ -47,6 +51,31 @@ footer {
     margin-bottom: 2%;
 }
 
-#check {
+#card-actions #edit {
     color: black;
+    margin-left: 5%;
+    background-color: #ffd700;
+}
+
+#card-actions #cancel {
+    color: white;
+    margin-left: 5%;
+}
+
+#card-top button {
+    color: white;
+}
+
+#card-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#card-top {
+    display: flex;
+    justify-content: space-between;
+}
+
+#navbar {
+    display: flex;
 }

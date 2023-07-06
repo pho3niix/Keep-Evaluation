@@ -1,7 +1,7 @@
 import db from '../../../db/db';
 import Notes, { INotes } from '../../../db/models/Notes.model';
 import { Filters, FormatDate } from '../../../utils/services';
-import { Op } from 'sequelize';
+import { Op, literal } from 'sequelize';
 
 export interface ISaveNote {
     Title: INotes['Title'];
@@ -100,16 +100,8 @@ class Queries extends Structures {
             Params.where = {
                 ...Params.where,
                 [Op.or]: [
-                    {
-                        Title: {
-                            [Op.like]: `%${Search}%`
-                        }
-                    },
-                    {
-                        Description: {
-                            [Op.like]: `%${Search}%`
-                        }
-                    }
+                    literal(`unaccent("Title") ilike '%${Search}%'`),
+                    literal(`unaccent("Description") ilike '%${Search}%'`),
                 ]
             }
         }

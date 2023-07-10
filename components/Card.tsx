@@ -11,7 +11,8 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { IList } from '../pages/api/notes/queries';
 import DeleteButton from './DeleteButton';
 import TextField from '@mui/material/TextField';
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
+import { MyContext } from '../utils/MyContext';
 
 const bull = (
     <Box
@@ -29,6 +30,7 @@ interface IChildren {
 export default function Note({ children }: IChildren) {
 
     const [EditForm, SetEditForm] = useState(false);
+    const { Trigger, LaunchTrigger } = useContext(MyContext);
 
     const HandleEdit = () => SetEditForm(!EditForm);
 
@@ -69,6 +71,7 @@ export default function Note({ children }: IChildren) {
             .then((res) => {
                 res.json()
                 HandleEdit();
+                LaunchTrigger(!Trigger)
             })
             .catch(e => console.log(e))
     }

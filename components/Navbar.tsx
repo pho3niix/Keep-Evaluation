@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -6,10 +6,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import { ISaveNote } from '../pages/api/notes/queries';
+import { MyContext } from '../utils/MyContext';
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
+
+    const { Trigger, LaunchTrigger } = useContext(MyContext);
 
     const Description = useRef(null)
 
@@ -37,6 +39,7 @@ const Navbar = () => {
             .then((res) => {
                 res.json();
                 handleClose();
+                LaunchTrigger(!Trigger)
             })
             .catch(e => console.log(e))
     }

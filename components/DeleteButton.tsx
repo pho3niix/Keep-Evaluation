@@ -7,10 +7,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ClearIcon from '@mui/icons-material/Clear';
 import { IList } from '../pages/api/notes/queries';
+import { MyContext } from '../utils/MyContext';
 
 export default function AlertDialog({ children }) {
 
     const [open, setOpen] = React.useState(false);
+    const { Trigger, LaunchTrigger } = React.useContext(MyContext)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -28,6 +30,7 @@ export default function AlertDialog({ children }) {
             .then((res) => {
                 res.json()
                 handleClose();
+                LaunchTrigger(!Trigger)
             })
             .catch(e => console.log(e))
     }

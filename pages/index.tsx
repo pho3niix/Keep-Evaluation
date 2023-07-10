@@ -1,8 +1,8 @@
-import { GetServerSideProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Card from "../components/Card";
 import TextField from '@mui/material/TextField';
+import { MyContext } from '../utils/MyContext';
 
 interface Props {
     query: ParsedUrlQuery;
@@ -12,14 +12,17 @@ export default function Index(props: Props) {
 
     const [Notes, setNotes] = useState([]);
     const [error, setError] = useState<any>();
-    const [Search, SetSearch] = useState('')
+    const [Search, SetSearch] = useState('');
+    const { Trigger } = useContext(MyContext);
 
     useEffect(() => {
         fetch(`/api/notes?Search=${Search}`)
             .then((res) => res.json())
-            .then(data => setNotes(data.results))
+            .then(data => {
+                setNotes(data.results)
+            })
             .catch((error) => setError(error));
-    }, [Search]);
+    }, [Search, Trigger]);
 
     function List() {
         if (Notes.length > 0) {

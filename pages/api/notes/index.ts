@@ -33,6 +33,9 @@ async function GetNotes(req: NextApiRequest, res: NextApiResponse): Promise<any>
     }: Filters = req.query;
 
     if (PageNumber && (isNaN(Number(PageNumber)) || Number(PageNumber) <= 0)) return res.status(400).json(new CustomError(400, 'The page number must be a number greater than 0.'));
+
+    if (ItemsPerPage && (isNaN(Number(ItemsPerPage)) || Number(ItemsPerPage) <= 0)) return res.status(400).json(new CustomError(400, 'The items per page number must be a number greater than 0.'));
+
     const List = await Notes.GetNotes({ Search, PageNumber, ItemsPerPage })
 
     const Total = List.total;
@@ -157,13 +160,13 @@ export default async function Index(req: NextApiRequest, res: NextApiResponse): 
     const { method, query } = req;
 
     switch (true) {
-        case method == 'GET' && !query.NoteId:
+        case method == 'GET' && query.NoteId == undefined:
             await GetNotes(req, res);
             break;
         case method == 'POST':
             await NewNote(req, res);
             break;
-        case method == 'GET' && !!query.NoteId:
+        case method == 'GET' && (query.NoteId !== null || query.NoteId === '' || query.NoteId !== undefined):
             await GetNoteById(req, res);
             break;
         case method == 'DELETE':

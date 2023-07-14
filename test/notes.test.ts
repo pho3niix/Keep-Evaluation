@@ -48,7 +48,7 @@ describe('/api/notes Get list - Red Scenarios', () => {
 
     test('Should return an error when pass a page number greater than total pages', async () => {
         const Params = {
-            PageNumber: 4,
+            PageNumber: 100000,
             ItemsPerPage: 10
         }
 
@@ -398,9 +398,257 @@ describe('/api/notes Update notes - Red Scenarios', () => {
             message: 'The specific note does not exists.'
         })
     })
+
+    test('Should return error when pass empty title', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'PUT',
+                query: Params,
+                body: {
+                    Title: '',
+                    Description: 'I modified description from auto testing'
+                }
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(409)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                name: 'CustomError',
+                statusCode: 409,
+                message: 'Validation error: Please, input a correct title. Make sure that length is no longer than 60 characters.'
+            })
+        }
+    })
+
+    test('Should return error when pass empty description', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'PUT',
+                query: Params,
+                body: {
+                    Title: 'I modified description from auto testing.',
+                    Description: ''
+                }
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(409)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                name: 'CustomError',
+                statusCode: 409,
+                message: 'Validation error: Please, input a correct description. Make sure that length is no longer than 255 characters.'
+            })
+        }
+    })
+
+    test('Should return error when pass null title', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'PUT',
+                query: Params,
+                body: {
+                    Title: null,
+                    Description: 'I modified description from auto testing'
+                }
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(409)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                name: 'CustomError',
+                statusCode: 409,
+                message: 'notNull Violation: Please, input a title for note.'
+            })
+        }
+    })
+
+    test('Should return error when pass null description', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'PUT',
+                query: Params,
+                body: {
+                    Title: 'I modified description from auto testing.',
+                    Description: null
+                }
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(409)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                name: 'CustomError',
+                statusCode: 409,
+                message: 'notNull Violation: Please, input a description for note.'
+            })
+        }
+    })
+
+    test('Should return error when pass empty title and description ', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'PUT',
+                query: Params,
+                body: {
+                    Title: '',
+                    Description: ''
+                }
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(409)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                name: 'CustomError',
+                statusCode: 409,
+                message: 'Validation error: Please, input a correct title. Make sure that length is no longer than 60 characters.,\n' +
+                    'Validation error: Please, input a correct description. Make sure that length is no longer than 255 characters.'
+            })
+        }
+    })
+
+    test('Should return error when pass null title and description ', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'PUT',
+                query: Params,
+                body: {
+                    Title: null,
+                    Description: null
+                }
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(409)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                name: 'CustomError',
+                statusCode: 409,
+                message: 'notNull Violation: Please, input a title for note.,\n' +
+                    'notNull Violation: Please, input a description for note.'
+            })
+        }
+    })
 })
 
-describe('/api/notes Create Note, Delete Note - Green Scenarios', () => {
+describe('/api/notes Create Note - Green Scenarios', () => {
     test('Should return success when pass correct Title and Description', async () => {
         const Params = {
             Title: 'Hello from auto testing',
@@ -423,7 +671,9 @@ describe('/api/notes Create Note, Delete Note - Green Scenarios', () => {
             results: Response.results
         })
     })
+})
 
+describe('/api/notes Delete Note - Green Scenarios', () => {
     test('Should return success when pass correct NoteId', async () => {
         const FindLastOneParams = createMocks({
             method: 'GET',
@@ -437,25 +687,27 @@ describe('/api/notes Create Note, Delete Note - Green Scenarios', () => {
 
         const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
 
-        const Params = {
-            NoteId: FindLastOne.NoteId
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'DELETE',
+                query: Params
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(200)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                message: 'Specific note successfully deleted.',
+                results: Response.results
+            })
         }
-
-        const { req, res } = createMocks({
-            method: 'DELETE',
-            query: Params
-        });
-
-        await HandleNotes(req, res);
-
-        expect(res.statusCode).toBe(200)
-
-        const Response = JSON.parse(res._getData({}))
-
-        expect(Response).toStrictEqual({
-            message: 'Specific note successfully deleted.',
-            results: Response.results
-        })
     })
 })
 

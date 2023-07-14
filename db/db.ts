@@ -36,7 +36,7 @@ async function query(text: string) {
 
             resolve(Response.rows)
 
-            await pool.end();
+            Client.release();
         } catch (error) {
             reject({
                 message: error.message,

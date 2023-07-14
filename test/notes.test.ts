@@ -133,3 +133,410 @@ describe('/api/notes Get Detail - Red Scenarios', () => {
         })
     })
 })
+
+describe('/api/notes Create Note - Red Scenarios', () => {
+    test('Should return error when Title received an empty value', async () => {
+        const Params = {
+            Title: '',
+            Description: 'Hello from the testing side.'
+        }
+
+        const { req, res } = createMocks({
+            method: 'POST',
+            body: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'Validation error: Please, input a correct title. Make sure that length is no longer than 60 characters.'
+        })
+    })
+
+    test('Should return error when Description received an empty value', async () => {
+        const Params = {
+            Title: 'Hello from the testing side',
+            Description: ''
+        }
+
+        const { req, res } = createMocks({
+            method: 'POST',
+            body: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'Validation error: Please, input a correct description. Make sure that length is no longer than 255 characters.'
+        })
+    })
+
+    test('Should return error when Title received an null value', async () => {
+        const Params = {
+            Title: null,
+            Description: 'Hello from the testing side.'
+        }
+
+        const { req, res } = createMocks({
+            method: 'POST',
+            body: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'notNull Violation: Please, input a title for note.'
+        })
+    })
+
+    test('Should return error when Description received an null value', async () => {
+        const Params = {
+            Title: 'Hello from the testing side',
+            Description: null
+        }
+
+        const { req, res } = createMocks({
+            method: 'POST',
+            body: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'notNull Violation: Please, input a description for note.'
+        })
+    })
+
+    test('Should return error when Description and Title received a null value', async () => {
+        const Params = {
+            Title: null,
+            Description: null
+        }
+
+        const { req, res } = createMocks({
+            method: 'POST',
+            body: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'notNull Violation: Please, input a title for note.,\n' +
+                'notNull Violation: Please, input a description for note.'
+        })
+    })
+
+    test('Should return error when Description and Title received an empty value', async () => {
+        const Params = {
+            Title: '',
+            Description: ''
+        }
+
+        const { req, res } = createMocks({
+            method: 'POST',
+            body: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'Validation error: Please, input a correct title. Make sure that length is no longer than 60 characters.,\n' +
+                'Validation error: Please, input a correct description. Make sure that length is no longer than 255 characters.'
+        })
+    })
+})
+
+describe('/api/notes Delete notes - Red Scenarios', () => {
+    test('Should return error when pass invalid UUID parameter', async () => {
+        const Params = {
+            NoteId: '1'
+        };
+
+        const { req, res } = createMocks({
+            method: 'DELETE',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'invalid input syntax for type uuid: "1"'
+        })
+    })
+
+    test('Should return error when pass null Note id value', async () => {
+        const Params = {
+            NoteId: null
+        };
+
+        const { req, res } = createMocks({
+            method: 'DELETE',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'Please, input an UUID value for Note Id.'
+        })
+    })
+
+    test('Should return error when Note id does not exists', async () => {
+        const Params = {
+            NoteId: 'eb068267-db97-4db4-9f2f-caa0c15d5fc1'
+        };
+
+        const { req, res } = createMocks({
+            method: 'DELETE',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(404)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 404,
+            message: 'The specific note does not exists.'
+        })
+    })
+})
+
+describe('/api/notes Update notes - Red Scenarios', () => {
+    test('Should return error when pass invalid UUID parameter', async () => {
+        const Params = {
+            NoteId: '1'
+        };
+
+        const { req, res } = createMocks({
+            method: 'PUT',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'invalid input syntax for type uuid: "1"'
+        })
+    })
+
+    test('Should return error when pass null Note id value', async () => {
+        const Params = {
+            NoteId: null
+        };
+
+        const { req, res } = createMocks({
+            method: 'PUT',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'Please, input an UUID value for Note Id.'
+        })
+    })
+
+    test('Should return error when Note id does not exists', async () => {
+        const Params = {
+            NoteId: 'eb068267-db97-4db4-9f2f-caa0c15d5fc1'
+        };
+
+        const { req, res } = createMocks({
+            method: 'PUT',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(404)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 404,
+            message: 'The specific note does not exists.'
+        })
+    })
+})
+
+describe('/api/notes Create Note, Delete Note - Green Scenarios', () => {
+    test('Should return success when pass correct Title and Description', async () => {
+        const Params = {
+            Title: 'Hello from auto testing',
+            Description: 'This is a note generated by auto testing.'
+        }
+
+        const { req, res } = createMocks({
+            method: 'POST',
+            body: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(200)
+
+        const Response = JSON.parse(res._getData({}))
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            message: 'Note saved successfully.',
+            results: Response.results
+        })
+    })
+
+    test('Should return success when pass correct NoteId', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        const Params = {
+            NoteId: FindLastOne.NoteId
+        }
+
+        const { req, res } = createMocks({
+            method: 'DELETE',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(200)
+
+        const Response = JSON.parse(res._getData({}))
+
+        expect(Response).toStrictEqual({
+            message: 'Specific note successfully deleted.',
+            results: Response.results
+        })
+    })
+})
+
+describe('/api/notes Note Detail by id - Green Scenarios', () => {
+    test('Should return success when pass correct NoteId or not exists message', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'GET',
+                query: Params
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(200)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                message: 'Specific note by id sucessfully displayed.',
+                results: Response.results
+            })
+        }
+    })
+})
+
+describe('/api/notes Update Note - Green Scenarios', () => {
+    test('Should return success when pass correct NoteId or not exists message', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Body = {
+                Title: 'I modified this title from auto testing.',
+                Description: 'I modified this description from auto testing.'
+            }
+
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            };
+
+            const { req, res } = createMocks({
+                method: 'PUT',
+                query: Params,
+                body: Body
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(200)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                message: 'Specific note successfully updated.',
+                results: Response.results
+            })
+        }
+    })
+})

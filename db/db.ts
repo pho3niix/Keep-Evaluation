@@ -35,6 +35,8 @@ async function query(text: string) {
             const Response = await Client.query(text);
 
             resolve(Response.rows)
+
+            await pool.end();
         } catch (error) {
             reject({
                 message: error.message,

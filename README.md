@@ -45,3 +45,4 @@ yarn test
 ### Requirements
 - Postgres
 - Node
+- Jest

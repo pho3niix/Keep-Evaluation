@@ -42,6 +42,48 @@ services:
     working_dir: /app
     restart: always
 
+  db_test:
+    image: postgres:14.7
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    expose:
+      - 5441
+    ports:
+      # Expose weird port on host to avoid collisions
+      - 5441:5432
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    restart: always
+  
+  test:
+    image: node:16.17.0-alpine
+    command: sh -c "yarn install && npm run migrations && npm run test"
+    ports: 
+      - 5003:5003
+    environment:
+      DB_URL: postgres://postgres:postgres@db_test:5432/postgres
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./test:/app/test
+      - ./jest.config.js:/app/jest.config.js
+      - ./components:/app/components
+      - ./db:/app/db
+      - ./next-env.d.ts:/app/next-env.d.ts
+      - ./package.json:/app/package.json
+      - ./pages:/app/pages
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./types:/app/types
+      - ./utils:/app/utils
+      - ./yarn.lock:/app/yarn.lock
+      - cache:/usr/local/share/.cache/yarn/v6
+      - node_modules:/app/node_modules
+    depends_on:
+      - db_test
+
+
 volumes:
   dbdata:
   node_modules:

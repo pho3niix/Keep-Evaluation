@@ -1,138 +1,7 @@
 import { createMocks, createResponse } from 'node-mocks-http';
 import HandleNotes from '../pages/api/notes/index';
 
-describe('/api/notes Get list - Red Scenarios', () => {
-    test('Should return an error when pass a string parameter as page number.', async () => {
-        const Params = {
-            PageNumber: 'n',
-            ItemsPerPage: 10
-        }
-
-        const { req, res } = createMocks({
-            method: 'GET',
-            query: Params
-        });
-
-        await HandleNotes(req, res);
-
-        expect(res.statusCode).toBe(400);
-
-        expect(JSON.parse(res._getData({}))).toStrictEqual({
-            name: 'CustomError',
-            statusCode: 400,
-            message: 'The page number must be a number greater than 0.'
-        });
-    })
-
-    test('Should return an error when pass a string parameter as items per page', async () => {
-        const Params = {
-            PageNumber: 1,
-            ItemsPerPage: 'x'
-        }
-
-        const { req, res } = createMocks({
-            method: 'GET',
-            query: Params
-        });
-
-        await HandleNotes(req, res);
-
-        expect(res.statusCode).toBe(400);
-
-        expect(JSON.parse(res._getData({}))).toStrictEqual({
-            name: 'CustomError',
-            statusCode: 400,
-            message: 'The items per page number must be a number greater than 0.'
-        })
-    })
-
-    test('Should return an error when pass a page number greater than total pages', async () => {
-        const Params = {
-            PageNumber: 100000,
-            ItemsPerPage: 10
-        }
-
-        const { req, res } = createMocks({
-            method: 'GET',
-            query: Params
-        });
-
-        await HandleNotes(req, res);
-
-        expect(res.statusCode).toBe(400)
-
-        expect(JSON.parse(res._getData({}))).toStrictEqual({
-            name: 'CustomError',
-            statusCode: 400,
-            message: 'The page number entered exceeds the total number of pages.'
-        })
-    })
-})
-
-describe('/api/notes Get Detail - Red Scenarios', () => {
-    test('Should return error when pass invalid UUID parameter', async () => {
-        const Params = {
-            NoteId: '1'
-        }
-
-        const { req, res } = createMocks({
-            method: 'GET',
-            query: Params
-        });
-
-        await HandleNotes(req, res);
-
-        expect(res.statusCode).toBe(409);
-
-        expect(JSON.parse(res._getData({}))).toStrictEqual({
-            name: 'CustomError',
-            statusCode: 409,
-            message: 'invalid input syntax for type uuid: "1"'
-        })
-    })
-
-    test('Should return error when specific Note id does not exists', async () => {
-        const Params = {
-            NoteId: '460c3764-d456-47c2-b980-4c6cb9cb3c8e'
-        }
-
-        const { req, res } = createMocks({
-            method: 'GET',
-            query: Params
-        });
-
-        await HandleNotes(req, res);
-
-        expect(res.statusCode).toBe(404);
-
-        expect(JSON.parse(res._getData({}))).toStrictEqual({
-            name: 'CustomError',
-            statusCode: 404,
-            message: 'The specific note does not exists.'
-        })
-    })
-
-    test('Should return error when pass empty value as UUID', async () => {
-        const Params = {
-            NoteId: ''
-        }
-
-        const { req, res } = createMocks({
-            method: 'GET',
-            query: Params
-        });
-
-        await HandleNotes(req, res);
-
-        expect(res.statusCode).toBe(409);
-
-        expect(JSON.parse(res._getData({}))).toStrictEqual({
-            name: 'CustomError',
-            statusCode: 409,
-            message: 'Please, input an UUID value for Note Id.'
-        })
-    })
-})
+// especificar el método usado en la ruta (POST, GET, PUT, PATCH, DELETE) -> Ruta - método - módulo
 
 describe('/api/notes Create Note - Red Scenarios', () => {
     test('Should return error when Title received an empty value', async () => {
@@ -268,22 +137,94 @@ describe('/api/notes Create Note - Red Scenarios', () => {
                 'Validation error: Please, input a correct description. Make sure that length is no longer than 255 characters.'
         })
     })
+
+    // agregar caso para limites de caracteres titulo
+
+    // agregar caso para limites de caracteres descripcion
 })
 
-describe('/api/notes Delete notes - Red Scenarios', () => {
-    test('Should return error when pass invalid UUID parameter', async () => {
+describe('/api/notes Get list - Red Scenarios', () => {
+    test('Should return an error when pass a string parameter as page number.', async () => {
         const Params = {
-            NoteId: '1'
-        };
+            PageNumber: 'n',
+            ItemsPerPage: 10
+        }
 
         const { req, res } = createMocks({
-            method: 'DELETE',
+            method: 'GET',
             query: Params
         });
 
         await HandleNotes(req, res);
 
-        expect(res.statusCode).toBe(409)
+        expect(res.statusCode).toBe(400);
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 400,
+            message: 'The page number must be a number greater than 0.'
+        });
+    })
+
+    test('Should return an error when pass a string parameter as items per page', async () => {
+        const Params = {
+            PageNumber: 1,
+            ItemsPerPage: 'x'
+        }
+
+        const { req, res } = createMocks({
+            method: 'GET',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(400);
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 400,
+            message: 'The items per page number must be a number greater than 0.'
+        })
+    })
+
+    test('Should return an error when pass a page number greater than total pages', async () => {
+        const Params = {
+            PageNumber: 100000,
+            ItemsPerPage: 10
+        }
+
+        const { req, res } = createMocks({
+            method: 'GET',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(400)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 400,
+            message: 'The page number entered exceeds the total number of pages.'
+        })
+    })
+})
+
+describe('/api/notes Get Detail - Red Scenarios', () => {
+    test('Should return error when pass invalid UUID parameter', async () => {
+        const Params = {
+            NoteId: '1'
+        }
+
+        const { req, res } = createMocks({
+            method: 'GET',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409);
 
         expect(JSON.parse(res._getData({}))).toStrictEqual({
             name: 'CustomError',
@@ -292,45 +233,47 @@ describe('/api/notes Delete notes - Red Scenarios', () => {
         })
     })
 
-    test('Should return error when pass null Note id value', async () => {
+    test('Should return error when specific Note id does not exists', async () => {
         const Params = {
-            NoteId: null
-        };
+            // Reemplazar por un UUID falso por ejemplo, solo número y guiones
+            NoteId: '460c3764-d456-47c2-b980-4c6cb9cb3c8e'
+        }
 
         const { req, res } = createMocks({
-            method: 'DELETE',
+            method: 'GET',
             query: Params
         });
 
         await HandleNotes(req, res);
 
-        expect(res.statusCode).toBe(409)
-
-        expect(JSON.parse(res._getData({}))).toStrictEqual({
-            name: 'CustomError',
-            statusCode: 409,
-            message: 'Please, input an UUID value for Note Id.'
-        })
-    })
-
-    test('Should return error when Note id does not exists', async () => {
-        const Params = {
-            NoteId: 'eb068267-db97-4db4-9f2f-caa0c15d5fc1'
-        };
-
-        const { req, res } = createMocks({
-            method: 'DELETE',
-            query: Params
-        });
-
-        await HandleNotes(req, res);
-
-        expect(res.statusCode).toBe(404)
+        expect(res.statusCode).toBe(404);
 
         expect(JSON.parse(res._getData({}))).toStrictEqual({
             name: 'CustomError',
             statusCode: 404,
             message: 'The specific note does not exists.'
+        })
+    })
+
+    test('Should return error when pass empty value as UUID', async () => {
+        // Evaluar cuando está vacío o cuando tiene un espacio en blanco
+        const Params = {
+            NoteId: ''
+        }
+
+        const { req, res } = createMocks({
+            method: 'GET',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409);
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'Please, input an UUID value for Note Id.'
         })
     })
 })
@@ -648,6 +591,71 @@ describe('/api/notes Update notes - Red Scenarios', () => {
     })
 })
 
+describe('/api/notes Delete notes - Red Scenarios', () => {
+    test('Should return error when pass invalid UUID parameter', async () => {
+        const Params = {
+            NoteId: '1'
+        };
+
+        const { req, res } = createMocks({
+            method: 'DELETE',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'invalid input syntax for type uuid: "1"'
+        })
+    })
+
+    test('Should return error when pass null Note id value', async () => {
+        const Params = {
+            NoteId: null
+        };
+
+        const { req, res } = createMocks({
+            method: 'DELETE',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(409)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 409,
+            message: 'Please, input an UUID value for Note Id.'
+        })
+    })
+
+    test('Should return error when Note id does not exists', async () => {
+        const Params = {
+            NoteId: 'eb068267-db97-4db4-9f2f-caa0c15d5fc1'
+        };
+
+        const { req, res } = createMocks({
+            method: 'DELETE',
+            query: Params
+        });
+
+        await HandleNotes(req, res);
+
+        expect(res.statusCode).toBe(404)
+
+        expect(JSON.parse(res._getData({}))).toStrictEqual({
+            name: 'CustomError',
+            statusCode: 404,
+            message: 'The specific note does not exists.'
+        })
+    })
+})
+
 describe('/api/notes Create Note - Green Scenarios', () => {
     test('Should return success when pass correct Title and Description', async () => {
         const Params = {
@@ -670,44 +678,6 @@ describe('/api/notes Create Note - Green Scenarios', () => {
             message: 'Note saved successfully.',
             results: Response.results
         })
-    })
-})
-
-describe('/api/notes Delete Note - Green Scenarios', () => {
-    test('Should return success when pass correct NoteId', async () => {
-        const FindLastOneParams = createMocks({
-            method: 'GET',
-            query: {
-                PageNumber: 1,
-                ItemsPerPage: 1
-            }
-        })
-
-        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
-
-        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
-
-        if (FindLastOne) {
-            const Params = {
-                NoteId: FindLastOne.NoteId
-            }
-
-            const { req, res } = createMocks({
-                method: 'DELETE',
-                query: Params
-            });
-
-            await HandleNotes(req, res);
-
-            expect(res.statusCode).toBe(200)
-
-            const Response = JSON.parse(res._getData({}))
-
-            expect(Response).toStrictEqual({
-                message: 'Specific note successfully deleted.',
-                results: Response.results
-            })
-        }
     })
 })
 
@@ -787,6 +757,44 @@ describe('/api/notes Update Note - Green Scenarios', () => {
 
             expect(Response).toStrictEqual({
                 message: 'Specific note successfully updated.',
+                results: Response.results
+            })
+        }
+    })
+})
+
+describe('/api/notes Delete Note - Green Scenarios', () => {
+    test('Should return success when pass correct NoteId', async () => {
+        const FindLastOneParams = createMocks({
+            method: 'GET',
+            query: {
+                PageNumber: 1,
+                ItemsPerPage: 1
+            }
+        })
+
+        await HandleNotes(FindLastOneParams.req, FindLastOneParams.res);
+
+        const FindLastOne = JSON.parse(FindLastOneParams.res._getData({})).results[0];
+
+        if (FindLastOne) {
+            const Params = {
+                NoteId: FindLastOne.NoteId
+            }
+
+            const { req, res } = createMocks({
+                method: 'DELETE',
+                query: Params
+            });
+
+            await HandleNotes(req, res);
+
+            expect(res.statusCode).toBe(200)
+
+            const Response = JSON.parse(res._getData({}))
+
+            expect(Response).toStrictEqual({
+                message: 'Specific note successfully deleted.',
                 results: Response.results
             })
         }

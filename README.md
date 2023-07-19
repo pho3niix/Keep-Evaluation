@@ -3,7 +3,12 @@ This is a simple sample app built with NextJS and Postgres.
 
 ## Setup with Docker (recommended)
 ```bash
-docker-compose up
+docker-compose up app
+```
+
+## Test app with Docker (recommended)
+```bash
+docker compose up test --abort-on-container-exit
 ```
 
 ## Setup without Docker
@@ -18,6 +23,11 @@ yarn
 ## Running the app
 ```bash
 yarn dev
+```
+
+## test the app
+```bash
+yarn test
 ```
 
 ## Resources

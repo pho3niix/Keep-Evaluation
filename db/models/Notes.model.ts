@@ -1,9 +1,6 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, ForeignKey } from 'sequelize';
 import { Database } from '../db';
 
-/**@Associations */
-import Users from './Users.model';
-
 export interface INotes {
     NoteId?: string;
     // UserId: string;

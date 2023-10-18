@@ -30,11 +30,6 @@ yarn dev
 yarn test
 ```
 
-## Resources
-- ✅ Searching the internet for answers (Stackoverflow, Google)
-- ❌ Github Copilot (please turn this off in your IDE)
-- ❌ Any AI based code generation tool
-
 ## Assignment
 ### Setup
 1. Run the sample application.

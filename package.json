@@ -1,5 +1,5 @@
 {
-  "name": "keep-setup-challenge",
+  "name": "ToDo-List",
   "version": "1.0.1",
   "scripts": {
     "dev": "next",

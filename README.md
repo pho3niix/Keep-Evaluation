@@ -30,12 +30,6 @@ yarn dev
 yarn test
 ```
 
-## Assignment
-### Setup
-1. Run the sample application.
-2. You should see the `pages/index.tsx` page render with some example information.
-3. If you're unable to run the application, please reach out to us for help. Otherwise, you're all set for the test.
-
 
 ### Requirements
 - Postgres

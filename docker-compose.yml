@@ -35,8 +35,9 @@ services:
     ports:
       # Weird port to avoid collisions
       - 5003:5003
-    depends_on:
-      - db
+    # Now it will run on a different server
+    # depends_on:
+    #   - db
     environment:
       DB_URL: postgres://postgres:postgres@db:5432/postgres
     working_dir: /app
@@ -76,8 +77,8 @@ services:
       - ./utils:/app/utils
       - cache:/usr/local/share/.cache/yarn/v6
       - node_modules:/app/node_modules
-    depends_on:
-      - db_test
+    # depends_on:
+    #   - db_test
 
 
 volumes:
